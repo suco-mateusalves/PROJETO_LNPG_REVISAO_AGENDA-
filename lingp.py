@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 def limparDados():
     nomeEntry.delete("0", END)
@@ -7,32 +8,47 @@ def limparDados():
 
 
 def gravarDados():
+    
     nome1 = nomeEntry.get()
     telefone1= telefoneEntry.get()
     email1 = emailEntry.get()
     preferencial1 = prefe00.get()
-    with open("contatos.txt","a",encoding="utf-8") as file:
-        file.write(f"{nome1},{telefone1},{email1},{preferencial1}\n")
-        file.close()
+    
+    if nome1 == "" or telefone1 == "" or email1 == "" or preferencial1 == "":
+        messagebox.showinfo("error", "sem dados")
+        return
+    if not telefone1.isdigit():
+        messagebox.showinfo("error", "Digite apenas numeros no campo telefone")
+        return
+    if "@" not in email1 and "." not in email1:
+        
+    else:
+        with open("contatos.txt","a",encoding="utf-8") as file:
+            file.write(f"{nome1},{telefone1},{email1},{preferencial1}\n")
+            file.close()
 
 def leitura():
     with open("contatos.txt","r",encoding="utf-8") as file:
         
-        file2 = file.readlines()
-        print(file2)
+        show = file.readlines()
+        
         lista = []
 
-        for x in file2:
-            lista.append(x.split(","))
+        for x in show:
+            nome, telefone, email, prefe00 = x.strip().split(",")
+            prefe00 = prefe00.replace("\n", "")
+            lista.append(f"Nome: {nome}, Telefone: {telefone}, Email:{email}, Preferencial: {prefe00}\n")
 
         print(lista)
 
         mostraCaixaDeTexto(lista)
 
         file.close()
-def mostraCaixaDeTexto(dados):
-    textMostrar.insert()
 
+def mostraCaixaDeTexto(dados):
+    textMostrar.delete(1.0, "end")
+    for dado in dados:
+        textMostrar.insert("end", f"{dado}\n")
 
 #Cria janela
 root = Tk()

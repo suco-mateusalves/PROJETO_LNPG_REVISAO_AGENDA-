@@ -8,41 +8,37 @@ def limparDados():
 
 
 def gravarDados():
-    
     nome1 = nomeEntry.get()
     telefone1= telefoneEntry.get()
     email1 = emailEntry.get()
     preferencial1 = prefe00.get()
     
     if nome1 == "" or telefone1 == "" or email1 == "" or preferencial1 == "":
-        messagebox.showinfo("error", "sem dados")
+        messagebox.showinfo("error", "Sem dados")
         return
     if not telefone1.isdigit():
         messagebox.showinfo("error", "Digite apenas numeros no campo telefone")
         return
-    if "@" not in email1 and "." not in email1:
-        
+    if "@" not in email1 or "." not in email1:
+        messagebox.showinfo("error", "Digite um email valido")
+        return
     else:
         with open("contatos.txt","a",encoding="utf-8") as file:
             file.write(f"{nome1},{telefone1},{email1},{preferencial1}\n")
+           
+            messagebox.showinfo("Salvo", "Contato salvo")
+            limparDados()
             file.close()
 
 def leitura():
     with open("contatos.txt","r",encoding="utf-8") as file:
-        
         show = file.readlines()
-        
         lista = []
-
         for x in show:
             nome, telefone, email, prefe00 = x.strip().split(",")
             prefe00 = prefe00.replace("\n", "")
-            lista.append(f"Nome: {nome}, Telefone: {telefone}, Email:{email}, Preferencial: {prefe00}\n")
-
-        print(lista)
-
+            lista.append(f"Nome: {nome}, Telefone: {telefone}, Email:{email}, Preferencial: {prefe00}")
         mostraCaixaDeTexto(lista)
-
         file.close()
 
 def mostraCaixaDeTexto(dados):
@@ -87,10 +83,10 @@ buttonEnviar = Button(root,text="Gravar", command=gravarDados)
 buttonEnviar.place(x=130,y=140)
 
 buttonLimpar = Button(root,text="Limpar", command=limparDados)
-buttonLimpar.place(x=130,y=160)
+buttonLimpar.place(x=200,y=140)
 
-botaoler = Button(root,text="ler", command=leitura)
-botaoler.place(x=170,y=160)
+botaoler = Button(root,text="Ler", command=leitura)
+botaoler.place(x=270,y=140)
 
 textMostrar = Text(root, x=200, y=300)
 textMostrar.place(x= 100, y=200)
